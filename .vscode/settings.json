@@ -1,0 +1,21 @@
+{
+	"cSpell.words": [
+		"ALEN",
+		"SIOCGIFHWADDR",
+		"Scapy",
+		"clippy",
+		"halen",
+		"hatype",
+		"hwaddr",
+		"ifindex",
+		"libc",
+		"loopback",
+		"pkttype",
+		"pnet",
+		"proto",
+		"repr",
+		"sendto",
+		"sockaddr",
+		"uapi"
+	]
+}
