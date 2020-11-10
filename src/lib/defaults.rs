@@ -18,7 +18,7 @@ pub struct Defaults
 	pub source:      [u8; ETH_MAC_ADDRESS_LENGTH],
 	pub destination: [u8; ETH_MAC_ADDRESS_LENGTH],
 
-	pub data:        String,
+	pub data:    String,
 	data_length: usize,
 }
 
@@ -70,8 +70,9 @@ impl Defaults
 
 /// Translates a `pnet::datalink::MacAddr` to an array `[u8;
 /// ETH_MAC_ADDRESS_LENGTH]`.
-pub const fn translate_mac_to_array(mac: MacAddr)
-	-> [u8; ETH_MAC_ADDRESS_LENGTH]
+pub const fn translate_mac_to_array(
+	mac: MacAddr,
+) -> [u8; ETH_MAC_ADDRESS_LENGTH]
 {
 	let mut mac_array: [u8; ETH_MAC_ADDRESS_LENGTH] =
 		[0; ETH_MAC_ADDRESS_LENGTH];

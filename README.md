@@ -23,13 +23,7 @@ internal_debug(&socket_adress, frame);
 
 in `components/binding.c`.
 
-You will be able to send **50** byte long messages. If you'd like to send more, adjust
-
-``` RUST
-const ETH_PAYLOAD_LENGTH: usize = 50;
-```
-
-in `src/lib/mod.rs`. There currently is to-do to make this dynamic.
+**Note**: You will need to have at least two interfaces running, as `rather` assumes the `lo` interface is at index 1 and a secondary interface (which `rather` chooses) at interface 2.
 
 ## Documentation
 
@@ -44,23 +38,15 @@ A brief description of the program workflow:
 ``` BASH
 START ::
     OPENING THE RAW SOCKET  -> (exiting with 1 if unsuccessful)
+    CREATING DEFAULTS -> (exiting with 1 if no two interfaces exist)
     HANDLING USER INPUT
     BUILDING THE ETHERNET FRAME ::
         USING THE INFORMATION TO PROVIDE THE FRAME STRUCTURE
         SERIALIZING THE FRAME STRUCTURE INTO AN ARRAY
     SENDING THE FRAME ::
         CALLING A WRAPPER FUNCTION
-        WRAPPER CALLS INTO C CODE ::
-            HERE sendto() IS EXECUTED
+        WRAPPER CALLS INTO C CODE
         CHECKING THE OUTCOME
     USER INPUT - PROCEED?
 :: FINISH
 ```
-
-## To Do
-
-Currently, a full, i.e. `ETH_PAYLOAD_LENGTH = 50 + 14 = ETH_HEADER_LENGTH` bytes long ethernet frame is generated. This is not dynamic, but should be.
-
-I did not check whether the _destination MAC address_ is properly used. Feel free to check this yourself:)
-
-**If you'd like to some tasks from the ToDo section, try it and provide a PR**.

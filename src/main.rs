@@ -21,23 +21,21 @@ fn main()
 
 	loop {
 		let information = defaults::Defaults::init();
-		let ethernet_frame: frames::EthernetFrame = information.clone().into();
-		let (frame_array, frame_length) = ethernet_frame.to_array();
 
-		if -1
-			== sockets::send::packet(
-				socket_descriptor,
-				&frame_array,
-				frame_length,
-				sockets::SocketAddress::construct_from(
-					&ethernet_frame,
-					&information,
-				),
-			) {
-			eprintln!("\nFailure");
-		} else {
-			println!("\nSuccess");
-		}
+		let ethernet_frame: frames::EthernetFrame =
+			information.clone().into();
+		let (frame_array, frame_length) = ethernet_frame.to_array();
+		let socket_address = sockets::SocketAddress::construct_from(
+			&ethernet_frame,
+			&information,
+		);
+
+		sockets::send::packet(
+			socket_descriptor,
+			&frame_array,
+			frame_length,
+			socket_address,
+		);
 
 		if interaction::quit_if_asked(socket_descriptor) {
 			break;

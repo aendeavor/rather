@@ -20,8 +20,10 @@ pub fn construct_options(information: &mut defaults::Defaults)
 			.collect::<Vec<&pnet::datalink::NetworkInterface>>();
 
 		if interfaces.is_empty() {
-			// TODO handle this properly
-			eprintln!("There is no such interface. Proceeding.")
+			eprintln!(
+				"There is no such interface. Proceeding with interface \
+				 at index 2."
+			)
 		} else {
 			information.source = defaults::translate_mac_to_array(
 				interfaces[0].mac.unwrap(),
@@ -87,19 +89,16 @@ pub fn get_input(question: &str) -> Option<String>
 
 pub fn quit_if_asked(socket_descriptor: i32) -> bool
 {
-	return match get_input("\nWould you like to go on? [Y/n] ")
-	{
-		Some(answer) => {
-			match answer.as_str() {
-				"n" | "N" | "no" | "No" => {
-					sockets::close::raw_socket(socket_descriptor);
-					true
-				},
-				_ => false,
-			}
+	return match get_input("\nWould you like to go on? [Y/n] ") {
+		Some(answer) => match answer.as_str() {
+			"n" | "N" | "no" | "No" => {
+				sockets::close::raw_socket(socket_descriptor);
+				true
+			},
+			_ => false,
 		},
-		None => false
-	}
+		None => false,
+	};
 }
 
 pub mod log
@@ -107,8 +106,8 @@ pub mod log
 	/// Just prints some information during startup.
 	pub fn init_console()
 	{
-		println!("");
-		print("RATHER :: v0.1.4");
+		println!();
+		print("RATHER :: v0.2.0");
 		print("Construct Ethernet packages and send them.");
 	}
 

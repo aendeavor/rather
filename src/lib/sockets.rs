@@ -15,11 +15,11 @@ use super::{
 /// The creation of this struct is **not** straightforward.
 /// Therefore, this struct is not public and only worked on
 /// via defined methods.
-/// 
+///
 /// ## The C Variant
-/// 
+///
 /// The `sockaddr_ll` struct in C looks like this:
-/// 
+///
 /// ``` C
 /// struct sockaddr_ll {
 ///     unsigned short  sll_family;
@@ -29,7 +29,7 @@ use super::{
 ///     unsigned char   sll_pkttype;
 ///     unsigned char   sll_halen;
 ///     unsigned char   sll_addr[8];
-///};
+/// };
 /// ```
 #[repr(C)]
 #[derive(Debug)]
@@ -48,18 +48,20 @@ impl SocketAddress
 {
 	pub fn construct_from(
 		frame: &frames::EthernetFrame,
-		information: &defaults::Defaults
+		information: &defaults::Defaults,
 	) -> Self
 	{
 		#[allow(clippy::cast_possible_truncation)]
 		Self {
 			sll_family:   PF_PACKET,
-			sll_protocol: 0,  // useless
+			sll_protocol: 0, // useless
 			sll_ifindex:  information.interface.index,
-			sll_hatype:   0,  // useless
-			sll_pkttype:  0,  // useless
+			sll_hatype:   0, // useless
+			sll_pkttype:  0, // useless
 			sll_halen:    ETH_MAC_ADDRESS_LENGTH as u8,
-			sll_addr:     frame.header.get_destination_for_socket_address(),
+			sll_addr:     frame
+				.header
+				.get_destination_for_socket_address(),
 		}
 	}
 }
@@ -75,16 +77,21 @@ pub mod send
 		frame: &[u8],
 		frame_length: usize,
 		socket_address: super::SocketAddress,
-	) -> isize
+	)
 	{
-		unsafe {
-			send_to(
-				socket_descriptor,
-				frame.as_ptr() as *const raw::c_char,
-				frame_length,
-				0,
-				socket_address,
-			)
+		if -1
+			== unsafe {
+				send_to(
+					socket_descriptor,
+					frame.as_ptr() as *const raw::c_char,
+					frame_length,
+					0,
+					socket_address,
+				)
+			} {
+			eprintln!("\nFailure");
+		} else {
+			println!("\nSuccess");
 		}
 	}
 
@@ -123,7 +130,7 @@ pub mod open
 					match last_error.kind() {
 						ErrorKind::PermissionDenied => eprintln!(
 							"Permission denied. Please execute this \
-							binary with privileges."
+							 binary with privileges."
 						),
 						_ => eprintln!("Error: {:?}", last_error),
 					};

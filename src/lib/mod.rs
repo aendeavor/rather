@@ -32,9 +32,3 @@ const ETH_PROTOCOL_ADDRESS_FIELD_LENGTH: usize = 2;
 #[allow(dead_code)]
 const ETH_HEADER_LENGTH: usize =
 	ETH_MAC_ADDRESS_LENGTH * 2 + ETH_PROTOCOL_ADDRESS_FIELD_LENGTH;
-
-/// Represents the maximum payload of an Ethernet frame.
-const ETH_PAYLOAD_LENGTH: usize = 50;
-
-/// Represents the maximum length of a normal (not Jumbo) frame.
-const ETH_FRAME_LENGTH: usize = ETH_PAYLOAD_LENGTH + ETH_HEADER_LENGTH;
